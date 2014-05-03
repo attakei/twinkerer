@@ -1,9 +1,13 @@
-import os
-from setuptools import setup, find_packages
 """setup script
 """
+import os
+import sys
+from setuptools import setup, find_packages
+from setuptools.command.test import test as TestCommand
+
 
 base_dir = os.path.abspath(os.path.dirname(__file__))
+sys.path.append(base_dir)
 
 requires = [
     'tinkerer',
@@ -33,6 +37,17 @@ with open(os.path.join(base_dir, 'README.rst')) as f:
     readme = f.read()
 
 
+class PyTest(TestCommand):
+    def finalize_options(self):
+        TestCommand.finalize_options(self)
+        self.test_args = []
+        self.test_suite = True
+    def run_tests(self):
+        # 外部で egg を読み込ませたくないならここでインポートしてください
+        import pytest
+        pytest.main(self.test_args)
+
+
 setup(
     name='twinkerer',
     version='0.0.1',
@@ -45,8 +60,12 @@ setup(
     classifiers=classifiers,
     
     install_requires=requires,
-    test_requires=test_requires,
+    tests_require=test_requires,
+    
+    test_suite='tests',
     
     packages=find_packages(),
     entry_points=entry_points,
+    
+    cmdclass = {'test': PyTest},
 )
