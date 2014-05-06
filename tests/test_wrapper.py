@@ -27,6 +27,8 @@ class SetupApiTests(unittest.TestCase):
             wrapper.setup_api(config)
         except ValueError:
             self.fail()
+        except:
+            pass
         with self.assertRaises(ValueError):
             wrapper.setup_api(config, 'twitter2')
         config.add_section('twitter2')
@@ -34,3 +36,11 @@ class SetupApiTests(unittest.TestCase):
             wrapper.setup_api(config, 'twitter2')
         except ValueError:
             self.fail()
+        except:
+            pass
+
+    def test_not_value_in_section(self):
+        config = ConfigParser.ConfigParser()
+        config.add_section('twitter')
+        with self.assertRaises(ConfigParser.NoOptionError):
+            wrapper.setup_api(config)
