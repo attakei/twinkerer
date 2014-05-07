@@ -8,6 +8,15 @@ DEFAULT_SECTION = 'twitter'
 
 
 def setup_api(config, section=None):
+    """Wrapper function to use twitter.Api() with ConfigParser
+    
+    :param config: config object
+    :type config: ConfigParser.ConfigParser
+    :param section: Section name to use on parser
+    :type section: str
+    :return: python-twitter API instance
+    :rtype: twitter.Api
+    """
     if section is None:
         section = DEFAULT_SECTION
     else:
