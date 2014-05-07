@@ -5,6 +5,7 @@ import unittest
 from twinkerer import wrapper
 
 import ConfigParser
+import twitter
 
 class SetupApiTests(unittest.TestCase):
     def test_not_like_configparser(self):
@@ -44,3 +45,9 @@ class SetupApiTests(unittest.TestCase):
         config.add_section('twitter')
         with self.assertRaises(ConfigParser.NoOptionError):
             wrapper.setup_api(config)
+        for conf_name in ['consumer_key', 'consumer_secret', 'access_token', 'access_token_secret']:
+            with self.assertRaises(ConfigParser.NoOptionError):
+                wrapper.setup_api(config)
+            config.set('twitter', conf_name, conf_name)
+        api_ = wrapper.setup_api(config)
+        self.assertIsInstance(api_, twitter.Api)
