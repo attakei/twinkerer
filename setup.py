@@ -10,7 +10,7 @@ base_dir = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(base_dir)
 
 requires = [
-    'tinkerer',
+    #'tinkerer',
     'twitter',
 ]
 test_requires = [
@@ -55,14 +55,14 @@ setup(
     license='MIT License',
     url='http://attakei.net/',
     classifiers=classifiers,
-    
+
     install_requires=requires,
     tests_require=test_requires,
-    
+
     test_suite='tests',
-    
+
     packages=find_packages(),
     entry_points=entry_points,
-    
+
     cmdclass = {'test': PyTest},
 )
