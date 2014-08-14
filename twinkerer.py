@@ -1,7 +1,10 @@
 """python-twitter wrapper functions.
 """
 import sys
-import configparser
+try:
+    from ConfigParser import ConfigParser
+except:
+    from configparser import ConfigParser
 import twitter
 
 
@@ -19,7 +22,7 @@ class Twinkerer(object):
             section = DEFAULT_SECTION
         else:
             section = str(section)
-        if not isinstance(config, configparser.ConfigParser):
+        if not isinstance(config, ConfigParser):
             raise ValueError()
         elif not config.has_section(section):
             raise ValueError("Argument-config don't have section 'twitter'")

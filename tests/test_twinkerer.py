@@ -1,7 +1,11 @@
 import os
 import sys
 import unittest
-import configparser
+try:
+    from ConfigParser import ConfigParser, NoOptionError
+except:
+    from configparser import ConfigParser, NoOptionError
+
 from twinkerer import Twinkerer
 import twitter
 
@@ -17,8 +21,7 @@ class Tests(unittest.TestCase):
 
 class TwinkererTests(unittest.TestCase):
     def test_from_config(self):
-        import configparser
-        config = configparser.SafeConfigParser()
+        config = ConfigParser()
         config.add_section('twitter')
         config.set('twitter', 'consumer_key', 'consumer_key')
         config.set('twitter', 'consumer_secret', 'consumer_secret')
@@ -48,7 +51,7 @@ class TwinkererFromConfigTests(unittest.TestCase):
                 Twinkerer.from_config(invalid_param)
 
     def test_not_have_section(self):
-        config = configparser.ConfigParser()
+        config = ConfigParser()
         with self.assertRaises(ValueError):
             Twinkerer.from_config(config)
         config.add_section('twitter')
@@ -69,12 +72,12 @@ class TwinkererFromConfigTests(unittest.TestCase):
             pass
 
     def test_not_value_in_section(self):
-        config = configparser.ConfigParser()
+        config = ConfigParser()
         config.add_section('twitter')
-        with self.assertRaises(configparser.NoOptionError):
+        with self.assertRaises(NoOptionError):
             Twinkerer.from_config(config)
         for conf_name in ['consumer_key', 'consumer_secret', 'access_token_key', 'access_token_secret']:
-            with self.assertRaises(configparser.NoOptionError):
+            with self.assertRaises(NoOptionError):
                 Twinkerer.from_config(config)
             config.set('twitter', conf_name, conf_name)
         tw_ = Twinkerer.from_config(config)
