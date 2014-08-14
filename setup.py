@@ -28,6 +28,9 @@ classifiers = [
 ]
 
 entry_points = {
+    'console_scripts': [
+        'twinker = twinkerer:main',
+    ],
 }
 
 
