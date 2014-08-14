@@ -1,3 +1,4 @@
+# -*- coding:utf8 -*-
 """setup script
 """
 import os
@@ -40,7 +41,6 @@ class PyTest(TestCommand):
         self.test_args = []
         self.test_suite = True
     def run_tests(self):
-        # 外部で egg を読み込ませたくないならここでインポートしてください
         import pytest
         pytest.main(self.test_args)
 
