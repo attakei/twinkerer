@@ -2,9 +2,8 @@
 """
 import unittest
 
-from twinkerer import wrapper
-
-import ConfigParser
+import twinkerer
+import configparser
 import twitter
 
 class SetupApiTests(unittest.TestCase):
@@ -17,37 +16,37 @@ class SetupApiTests(unittest.TestCase):
         ]
         for invalid_param in invalid_patterns:
             with self.assertRaises(ValueError):
-                wrapper.setup_api(invalid_param)
+                twinkerer.setup_api(invalid_param)
 
     def test_not_have_section(self):
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         with self.assertRaises(ValueError):
-            wrapper.setup_api(config)
+            twinkerer.setup_api(config)
         config.add_section('twitter')
         try:
-            wrapper.setup_api(config)
+            twinkerer.setup_api(config)
         except ValueError:
             self.fail()
         except:
             pass
         with self.assertRaises(ValueError):
-            wrapper.setup_api(config, 'twitter2')
+            twinkerer.setup_api(config, 'twitter2')
         config.add_section('twitter2')
         try:
-            wrapper.setup_api(config, 'twitter2')
+            twinkerer.setup_api(config, 'twitter2')
         except ValueError:
             self.fail()
         except:
             pass
 
     def test_not_value_in_section(self):
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         config.add_section('twitter')
-        with self.assertRaises(ConfigParser.NoOptionError):
-            wrapper.setup_api(config)
+        with self.assertRaises(configparser.NoOptionError):
+            twinkerer.setup_api(config)
         for conf_name in ['consumer_key', 'consumer_secret', 'access_token', 'access_token_secret']:
-            with self.assertRaises(ConfigParser.NoOptionError):
-                wrapper.setup_api(config)
+            with self.assertRaises(configparser.NoOptionError):
+                twinkerer.setup_api(config)
             config.set('twitter', conf_name, conf_name)
-        api_ = wrapper.setup_api(config)
-        self.assertIsInstance(api_, twitter.Api)
+        api_ = twinkerer.setup_api(config)
+        self.assertIsInstance(api_, twitter.Twitter)

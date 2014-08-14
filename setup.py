@@ -11,7 +11,7 @@ sys.path.append(base_dir)
 
 requires = [
     'tinkerer',
-    'python-twitter',
+    'twitter',
 ]
 test_requires = [
     'pytest',
@@ -27,9 +27,6 @@ classifiers = [
 ]
 
 entry_points = {
-    'console_scripts': [
-        'twinker = twinkerer:main',
-    ],
 }
 
 
