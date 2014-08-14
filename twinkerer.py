@@ -11,6 +11,7 @@ DEFAULT_SECTION = 'twitter'
 class Twinkerer(object):
     def __init__(self, api):
         self._api = api
+        self._me = None
 
     @classmethod
     def from_config(cls, config, section=None):
@@ -43,6 +44,20 @@ class Twinkerer(object):
                 )
         )
         return cls(api_)
+
+    @property
+    def me(self):
+        if not self._me:
+            user_settings = self._api.account.settings(_method='GET')
+            user = self._api.users.show(screen_name=user_settings['screen_name'])
+            user['_settings'] = user_settings
+            self._me = user
+        return self._me
+
+    def get_my_timeline(self):
+        user_id_ = self.me['id']
+        tweets_ = self._api.statuses.user_timeline(user_id=user_id_)
+        return tweets_
 
 
 def main(argv=None):
