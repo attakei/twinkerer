@@ -12,5 +12,5 @@ install:
   - pip install .
   - pip install pytest
 
- 
-script: py.tests .
+
+script: py.test .
