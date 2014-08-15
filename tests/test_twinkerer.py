@@ -1,11 +1,11 @@
+import unittest
 import os
 import sys
-import unittest
+import datetime
 try:
     from ConfigParser import ConfigParser, NoOptionError
 except:
     from configparser import ConfigParser, NoOptionError
-
 from twinkerer import Twinkerer
 import twitter
 
@@ -82,3 +82,35 @@ class TwinkererFromConfigTests(unittest.TestCase):
             config.set('twitter', conf_name, conf_name)
         tw_ = Twinkerer.from_config(config)
         self.assertIsInstance(tw_._api, twitter.Twitter)
+
+
+class TwinkererBuildTitleTests(unittest.TestCase):
+    template = 'tweets from {from_date} to {to_date}'
+
+    def setUp(self):
+        import testmodule1
+        self.tw = Twinkerer.from_module(testmodule1)
+        self.today = datetime.date.today()
+        self.yesterday = self.today - datetime.timedelta(1)
+
+    def test_it(self):
+        title_ = self.tw.build_title(self.yesterday, self.today, self.template)
+        self.assertEqual(title_, 'tweets from %s to %s' %(str(self.yesterday), str(self.today)))
+
+    def test_formated(self):
+        title_ = self.tw.build_title(self.today, self.today, '')
+        self.assertEqual(title_, '')
+
+    def test_default_template(self):
+        title_ = self.tw.build_title(self.yesterday, self.today)
+        self.assertEqual(title_, 'tweets from %s to %s' %(str(self.yesterday), str(self.today)))
+        title_ = self.tw.build_title(self.today, self.today)
+        self.assertEqual(title_, 'tweets at %s' % str(self.today))
+
+    def test_module_config(self):
+        import testmodule2
+        tw = Twinkerer.from_module(testmodule2)
+        title_ = tw.build_title(self.yesterday, self.today)
+        self.assertEqual(title_, 'from %s to %s' %(str(self.yesterday), str(self.today)))
+        title_ = tw.build_title(self.today, self.today)
+        self.assertEqual(title_, '%s' % str(self.today))

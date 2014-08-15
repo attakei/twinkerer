@@ -5,15 +5,24 @@ try:
 except:
     from configparser import ConfigParser
 import twitter
+from twinkerer import utils
 
 
 DEFAULT_SECTION = 'twitter'
 
+DEFAULT_CONFIGS = {
+    'twinkerer_templates': {
+        'title_oneday': 'tweets at {from_date}',
+        'title_between': 'tweets from {from_date} to {to_date}',
+    }
+}
+
 
 class Twinkerer(object):
-    def __init__(self, api):
+    def __init__(self, api, config={}):
         self._api = api
         self._me = None
+        self._config = utils.update_dict(DEFAULT_CONFIGS, config)
 
     @classmethod
     def from_config(cls, config, section=None):
@@ -45,7 +54,8 @@ class Twinkerer(object):
                 module.twitter_consumer_secret,
                 )
         )
-        return cls(api_)
+        config_ = {k: v for k, v in module.__dict__.items() if k.startswith('twinkerer_')}
+        return cls(api_, config_)
 
     @property
     def me(self):
@@ -70,3 +80,11 @@ class Twinkerer(object):
             else:
                 print(u'Tw>\n'+tweet_inst.text)
             print('========')
+
+    def build_title(self, from_date, to_date, template=None):
+        if template is None:
+            if from_date == to_date:
+                template = self._config['twinkerer_templates']['title_oneday']
+            else:
+                template = self._config['twinkerer_templates']['title_between']
+        return template.format(from_date=from_date, to_date=to_date)
