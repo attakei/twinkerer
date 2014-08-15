@@ -34,7 +34,7 @@ class ParseTweetTests(unittest.TestCase):
     def test_retweet(self):
         tw_ = parse_tweet({
             "id": 12738165059, "id_str": "12738165059", "created_at": "Thu Oct 14 22:20:15 +0000 2010", "text": "tweet",
-            "retweeted_status": { "retweeted": True, "created_at": "Fri Aug 15 02:22:31 +0000 2014",  "id": 1, "text": "text"}
+            "retweeted_status": {"retweeted": True, "created_at": "Fri Aug 15 02:22:31 +0000 2014", "id": 1, "text": "text"}
         })
         self.assertIsInstance(tw_, ReTweet)
         self.assertEqual(tw_.id, 1)
