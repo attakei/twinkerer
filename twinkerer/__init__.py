@@ -5,6 +5,7 @@ try:
 except:
     from configparser import ConfigParser
 import twitter
+from twinkerer.twitterapi import parse_tweet, Tweet, ReTweet
 
 
 DEFAULT_SECTION = 'twitter'
@@ -62,16 +63,14 @@ class Twinkerer(object):
         return tweets_
 
     def fetch_timeline(self, user_id, from_date, to_date):
-        from twinkerer.twitterapi import parse_tweet, Tweet, ReTweet
         tl_list = []
         done_fetch_ = False
         current_id_ = None
         for _ in range(10):
-            print('api %s' % _)
             if current_id_ is None:
-                tweets_ = self._api.statuses.user_timeline(user_id=user_id, count=3)
+                tweets_ = self._api.statuses.user_timeline(user_id=user_id)
             else:
-                tweets_ = self._api.statuses.user_timeline(user_id=user_id, count=3, max_id=current_id_)
+                tweets_ = self._api.statuses.user_timeline(user_id=user_id, max_id=current_id_)
             for tweet in tweets_:
                 tw = Tweet(tweet)
                 current_id_ = tw.id - 1
@@ -86,12 +85,11 @@ class Twinkerer(object):
         return tl_list
 
     def fetch(self, args):
-        from twinkerer.twitterapi import parse_tweet, ReTweet
         user_id = self.me['id']
         for tweet in self.fetch_timeline(user_id, args.from_datetime, args.to_datetime):
             print('========')
             if isinstance(tweet, ReTweet):
-                print(u'Re>\n'+tweet.text)
+                print(u'ReTweet>\n' + tweet.text)
             else:
-                print(u'Tw>\n'+tweet.text)
+                print(u'Tweet>\n' + tweet.text)
             print(u'at '+tweet.created_at.isoformat())
