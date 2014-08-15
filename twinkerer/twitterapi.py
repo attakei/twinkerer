@@ -60,7 +60,7 @@ class Model(object):
 class Tweet(Model):
     """Tweet object based from twitter-api json
     """
-    id = _ConvertPattern('id', 'id_str')
+    id = _ConvertPattern('id', 'id')
     created_at = _ConvertPattern('created_at', 'created_at', _strptime)
     text = _ConvertPattern('text', 'text')
 

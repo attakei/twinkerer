@@ -74,7 +74,7 @@ class Twinkerer(object):
                 tweets_ = self._api.statuses.user_timeline(user_id=user_id, count=3, max_id=current_id_)
             for tweet in tweets_:
                 tw = Tweet(tweet)
-                current_id_ = int(tw.id) - 1
+                current_id_ = tw.id - 1
                 if to_date <= tw.created_at:
                     continue
                 if tw.created_at < from_date:
