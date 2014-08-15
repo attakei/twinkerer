@@ -14,37 +14,30 @@ class TweetTests(unittest.TestCase):
 
 
 class ConvertPatternTests(unittest.TestCase):
-    class Target(object):
-        id_str = _ConvertPattern('id_str', 'id', str)
-
     def test_convert(self):
         p_ = _ConvertPattern('id_str', 'id', str)
-        self.assertIsInstance(p_.convert({'id':1}), str)
+        self.assertIsInstance(p_.convert({'id': 1}), str)
 
     def test_no_convert(self):
         p_ = _ConvertPattern('id_str', 'id')
-        data_ = {'id': 111}
-        value = p_.convert(data_)
+        value = p_.convert({'id': 111})
         self.assertEqual(value, 111)
 
     def test_convert_failed(self):
         def _strptime(bs):
             return datetime.datetime.strptime(bs, '%a')
         p_ = _ConvertPattern('id_str', 'id', _strptime)
-        data_ = {'id': 111}
         with self.assertRaises(p_.ConvertFailed):
-            p_.convert(data_)
+            p_.convert({'id': 111})
 
     def test_required(self):
         p_ = _ConvertPattern('id_str', 'id', str)
-        data_ = {'id2': 111}
         with self.assertRaises(p_.RequiredNotFound):
-            p_.convert(data_)
+            p_.convert({'id2': 111})
 
     def test_not_required(self):
         p_ = _ConvertPattern('id_str', 'id', str, False)
-        data_ = {'id2': 111}
         try:
-            p_.convert(data_)
+            p_.convert({'id2': 111})
         except p_.RequiredNotFound:
             self.fail('caught Exception')
