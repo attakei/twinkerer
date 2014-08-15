@@ -7,10 +7,17 @@ import datetime
 def _strptime(date_string):
     """wrapper to parse datetime-string for Twitter-API
     """
-    return datetime.datetime.strptime(
-        date_string,
-        '%a %b %d %H:%M:%S %z %Y'
-    )
+    try:
+        datetime_data = datetime.datetime.strptime(
+            date_string,
+            '%a %b %d %H:%M:%S %z %Y'
+        )
+    except:
+        datetime_data = datetime.datetime.strptime(
+            date_string,
+            '%a %b %d %H:%M:%S +0000 %Y'
+        )
+    return datetime_data
 
 
 class _ConvertPattern(object):
