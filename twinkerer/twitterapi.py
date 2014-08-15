@@ -43,7 +43,7 @@ class _ConvertPattern(object):
 class Tweet(object):
     """Tweet object based from twitter-api json
     """
-    __slot__ = ['id', 'created_at', 'text', ]
+    __slots__ = ['id', 'created_at', 'text', ]
 
     CONVERT_PATTERNS = (
         _ConvertPattern('id', 'id_str'),
