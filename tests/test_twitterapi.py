@@ -1,5 +1,8 @@
 import unittest
-from twinkerer.twitterapi import Tweet, _ConvertPattern
+from twinkerer.twitterapi import (
+    _ConvertPattern,
+    Tweet, ReTweet, parse_tweet,
+)
 import datetime
 
 
@@ -11,6 +14,30 @@ class TweetTests(unittest.TestCase):
         self.assertIsInstance(tw_.created_at, datetime.datetime)
         self.assertIsInstance(tw_.text, str)
         # TODO: add next attributes...
+
+
+class ReTweetTests(unittest.TestCase):
+    def test_from_json(self):
+        tw_ = ReTweet({"id": 12738165059, "id_str": "12738165059", "created_at": "Thu Oct 14 22:20:15 +0000 2010", "text": "tweet"})
+        self.assertIsInstance(tw_, ReTweet)
+        self.assertEqual(tw_.id, "12738165059")
+        self.assertIsInstance(tw_.created_at, datetime.datetime)
+        self.assertIsInstance(tw_.text, str)
+        # TODO: add next attributes...
+
+
+class ParseTweetTests(unittest.TestCase):
+    def test_tweet(self):
+        tw_ = parse_tweet({"id": 12738165059, "id_str": "12738165059", "created_at": "Thu Oct 14 22:20:15 +0000 2010", "text": "tweet"})
+        self.assertIsInstance(tw_, Tweet)
+
+    def test_retweet(self):
+        tw_ = parse_tweet({
+            "id": 12738165059, "id_str": "12738165059", "created_at": "Thu Oct 14 22:20:15 +0000 2010", "text": "tweet",
+            "retweeted_status": { "retweeted": True, "created_at": "Fri Aug 15 02:22:31 +0000 2014",  "id_str": "1", "text": "text"}
+        })
+        self.assertIsInstance(tw_, ReTweet)
+        self.assertEqual(tw_.id, "1")
 
 
 class ConvertPatternTests(unittest.TestCase):

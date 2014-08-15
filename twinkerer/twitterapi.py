@@ -49,6 +49,9 @@ class _ConvertPattern(object):
 
 class Model(object):
     def __init__(self, json):
+        for name_, pattern_ in self.__class__.__base__.__dict__.items():
+            if isinstance(pattern_, _ConvertPattern):
+                setattr(self, name_, pattern_.convert(json))
         for name_, pattern_ in self.__class__.__dict__.items():
             if isinstance(pattern_, _ConvertPattern):
                 setattr(self, name_, pattern_.convert(json))
@@ -60,3 +63,15 @@ class Tweet(Model):
     id = _ConvertPattern('id', 'id_str')
     created_at = _ConvertPattern('created_at', 'created_at', _strptime)
     text = _ConvertPattern('text', 'text')
+
+
+class ReTweet(Tweet):
+    """ReTweet object based from twitter-api json
+    """
+    pass
+
+
+def parse_tweet(json):
+    if 'retweeted_status' in json:
+        return ReTweet(json['retweeted_status'])
+    return Tweet(json)
