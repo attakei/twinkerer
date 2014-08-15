@@ -40,14 +40,16 @@ class _ConvertPattern(object):
             raise self.RequiredNotFound()
 
 
-class Tweet(object):
+class Model(object):
+    def __init__(self, json):
+        for name_, pattern_ in self.__class__.__dict__.items():
+            if isinstance(pattern_, _ConvertPattern):
+                setattr(self, name_, pattern_.convert(json))
+
+
+class Tweet(Model):
     """Tweet object based from twitter-api json
     """
     id = _ConvertPattern('id', 'id_str')
     created_at = _ConvertPattern('created_at', 'created_at', _strptime)
     text = _ConvertPattern('text', 'text')
-
-    def __init__(self, json):
-        for name_, pattern_ in self.__class__.__dict__.items():
-            if isinstance(pattern_, _ConvertPattern):
-                setattr(self, name_, pattern_.convert(json))
