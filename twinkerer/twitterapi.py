@@ -35,9 +35,9 @@ class _ConvertPattern(object):
                     attr_value_ = base_dict[self.origin]
                 return attr_value_
             except:
-                raise self.ConvertFailed()
+                raise self.ConvertFailed('target is %s: %s' % (self.origin, base_dict[self.origin]))
         elif self.required:
-            raise self.RequiredNotFound()
+            raise self.RequiredNotFound('target is %s' % (self.origin,))
 
 
 class Model(object):
