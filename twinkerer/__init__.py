@@ -60,3 +60,13 @@ class Twinkerer(object):
         user_id_ = self.me['id']
         tweets_ = self._api.statuses.user_timeline(user_id=user_id_)
         return tweets_
+
+    def fetch(self, args):
+        from twinkerer.twitterapi import parse_tweet, ReTweet
+        for tweet in self.get_my_timeline():
+            tweet_inst = parse_tweet(tweet)
+            if isinstance(tweet_inst, ReTweet):
+                print(u'Re>\n'+tweet_inst.text)
+            else:
+                print(u'Tw>\n'+tweet_inst.text)
+            print('========')

@@ -1,7 +1,8 @@
+import os
 import sys
 import argparse
 import datetime
-
+from twinkerer import Twinkerer
 
 class DateStringAction(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
@@ -41,8 +42,8 @@ def build_args(args):
         args.to_date.month,
         args.to_date.day,
     ) + datetime.timedelta(days=1)
-    if args.run_mode is None:
-        args.run_mode = 'fetch'
+    if args.command is None:
+        args.command = 'fetch'
 
 
 def main(argv=None):
@@ -52,11 +53,11 @@ def main(argv=None):
         argv = sys.argv[1:]
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        '-f', '--fetch', dest='run_mode',
+        '-f', '--fetch', dest='command',
         action='store_const', const='fetch',
     )
     parser.add_argument(
-        '-p', '--post', dest='run_mode',
+        '-p', '--post', dest='command',
         action='store_const', const='post',
     )
     parser.add_argument(
@@ -69,6 +70,18 @@ def main(argv=None):
         action=UnsignedIntegerAction,
         default=7,
     )
+    parser.add_argument(
+        '--conf', dest='config_path', nargs='?',
+    )
 
     args = parser.parse_args(argv)
     build_args(args)
+
+    cwd_ = os.getcwd()
+    if args.config_path is None:
+        sys.path.append(cwd_)
+        import conf
+        tw = Twinkerer.from_module(conf)
+
+    command = getattr(tw, args.command)
+    return command(args)
