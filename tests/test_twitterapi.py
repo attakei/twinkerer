@@ -2,6 +2,7 @@ import unittest
 from twinkerer.twitterapi import (
     _ConvertPattern,
     Tweet, ReTweet, parse_tweet,
+    User,
 )
 import datetime
 
@@ -25,6 +26,15 @@ class ReTweetTests(unittest.TestCase):
         self.assertIsInstance(tw_.text, str)
         # TODO: add next attributes...
 
+
+class UserTests(unittest.TestCase):
+    def test_from_json(self):
+        tw_ = User({"id": 1, "name": "user", "screen_name": "tweetie"})
+        self.assertIsInstance(tw_, User)
+        self.assertEqual(tw_.id, 1)
+        self.assertEqual(tw_.name, 'user')
+        self.assertEqual(tw_.screen_name, 'tweetie')
+        # TODO: add next attributes...
 
 class ParseTweetTests(unittest.TestCase):
     def test_tweet(self):

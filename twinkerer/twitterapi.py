@@ -57,6 +57,16 @@ class Model(object):
                 setattr(self, name_, pattern_.convert(json))
 
 
+class User(Model):
+    """twitter user-account object based from twitter-api json
+    """
+    id = _ConvertPattern('id', 'id')
+    name = _ConvertPattern('name', 'name')
+    screen_name = _ConvertPattern('screen_name', 'screen_name')
+    profile_image_url = _ConvertPattern('profile_image_url', 'profile_image_url')
+    profile_image_url_https = _ConvertPattern('profile_image_url_https', 'profile_image_url_https')
+
+
 class Tweet(Model):
     """Tweet object based from twitter-api json
     """
