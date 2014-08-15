@@ -13,23 +13,45 @@ def _strptime(date_string):
     )
 
 
+class _ConvertPattern(object):
+    class ConvertFailed(Exception):
+        pass
+
+    class RequiredNotFound(Exception):
+        pass
+
+    def __init__(self, target, origin, converter=None, required=True):
+        self.target = target
+        self.origin = origin
+        self.converter = converter
+        self.required = required
+
+    def junction(self, target_obj, base_dict):
+        if self.origin in base_dict:
+            try:
+                if self.converter:
+                    attr_value_ = self.converter(base_dict[self.origin])
+                else:
+                    attr_value_ = base_dict[self.origin]
+                setattr(target_obj, self.target, attr_value_)
+            except:
+                raise self.ConvertFailed()
+        elif self.required:
+            raise self.RequiredNotFound()
+
+
 class Tweet(object):
     """Tweet object based from twitter-api json
     """
     __slot__ = ['id', 'created_at', 'text', ]
 
-    JSON_OBJ_MAPS = (
-        ('id', 'id_str', None),
-        ('created_at', 'created_at', _strptime),
-        ('text', 'text', None),
+    CONVERT_PATTERNS = (
+        _ConvertPattern('id', 'id_str'),
+        _ConvertPattern('created_at', 'created_at', _strptime),
+        _ConvertPattern('text', 'text'),
     )
     """convert patterns"""
 
     def __init__(self, json):
-        for map_ in self.JSON_OBJ_MAPS:
-            if map_[1] in json:
-                if map_[2] is None:
-                    value = json[map_[1]]
-                else:
-                    value = map_[2](json[map_[1]])
-                setattr(self, map_[0], value)
+        for pattern in self.CONVERT_PATTERNS:
+            pattern.junction(self, json)
