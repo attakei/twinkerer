@@ -58,6 +58,10 @@ class Tweet(Model):
     created_at = _ConvertPattern('created_at', utils.strptime)
     text = _ConvertPattern('text')
 
+    def __init__(self, json):
+        super(Tweet, self).__init__(json)
+        self.user = User(json['user'])
+
 
 class ReTweet(Tweet):
     """ReTweet object based from twitter-api json

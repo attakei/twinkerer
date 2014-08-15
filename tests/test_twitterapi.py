@@ -9,17 +9,24 @@ import datetime
 
 class TweetTests(unittest.TestCase):
     def test_from_json(self):
-        tw_ = Tweet({"id": 12738165059, "id_str": "12738165059", "created_at": "Thu Oct 14 22:20:15 +0000 2010", "text": "tweet"})
+        tw_ = Tweet({
+            "id": 12738165059, "id_str": "12738165059", "created_at": "Thu Oct 14 22:20:15 +0000 2010", "text": "tweet",
+            "user": {"id": 2, "name": "testet", "screen_name": "test_user"},
+        })
         self.assertIsInstance(tw_, Tweet)
         self.assertEqual(tw_.id, 12738165059)
         self.assertIsInstance(tw_.created_at, datetime.datetime)
         self.assertIsInstance(tw_.text, str)
+        self.assertIsInstance(tw_.user, User)
         # TODO: add next attributes...
 
 
 class ReTweetTests(unittest.TestCase):
     def test_from_json(self):
-        tw_ = ReTweet({"id": 12738165059, "id_str": "12738165059", "created_at": "Thu Oct 14 22:20:15 +0000 2010", "text": "tweet"})
+        tw_ = ReTweet({
+            "id": 12738165059, "id_str": "12738165059", "created_at": "Thu Oct 14 22:20:15 +0000 2010", "text": "tweet",
+            "user": {"id": 2, "name": "testet", "screen_name": "test_user"},
+        })
         self.assertIsInstance(tw_, ReTweet)
         self.assertEqual(tw_.id, 12738165059)
         self.assertIsInstance(tw_.created_at, datetime.datetime)
@@ -38,13 +45,20 @@ class UserTests(unittest.TestCase):
 
 class ParseTweetTests(unittest.TestCase):
     def test_tweet(self):
-        tw_ = parse_tweet({"id": 12738165059, "id_str": "12738165059", "created_at": "Thu Oct 14 22:20:15 +0000 2010", "text": "tweet"})
+        tw_ = parse_tweet({
+            "id": 12738165059, "id_str": "12738165059", "created_at": "Thu Oct 14 22:20:15 +0000 2010", "text": "tweet",
+            "user": {"id": 2, "name": "testet", "screen_name": "test_user"},
+        })
         self.assertIsInstance(tw_, Tweet)
 
     def test_retweet(self):
         tw_ = parse_tweet({
             "id": 12738165059, "id_str": "12738165059", "created_at": "Thu Oct 14 22:20:15 +0000 2010", "text": "tweet",
-            "retweeted_status": {"retweeted": True, "created_at": "Fri Aug 15 02:22:31 +0000 2014", "id": 1, "text": "text"}
+            "user": {"id": 2, "name": "testet", "screen_name": "test_user"},
+            "retweeted_status": {
+                "retweeted": True, "created_at": "Fri Aug 15 02:22:31 +0000 2014", "id": 1, "text": "text",
+                "user": {"id": 2, "name": "testet", "screen_name": "test_user"},
+            }
         })
         self.assertIsInstance(tw_, ReTweet)
         self.assertEqual(tw_.id, 1)
