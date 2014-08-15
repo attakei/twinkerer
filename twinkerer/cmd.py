@@ -16,7 +16,17 @@ class DateStringAction(argparse.Action):
                 return
             except:
                 continue
-        raise Exception()
+        parser.error('"%s" must be string to parse as datetime.' % self.dest)
+
+
+class UnsignedIntegerAction(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        value = int(values)
+        if value > 0:
+            setattr(namespace, self.dest, value)
+            return
+        else:
+            parser.error('"%s" must be plus integer.' % self.dest)
 
 
 def build_args(args):
@@ -46,7 +56,7 @@ def main(argv=None):
     )
     parser.add_argument(
         '--days', dest='days',
-        type=int,
+        action=UnsignedIntegerAction,
         default=7,
     )
 
