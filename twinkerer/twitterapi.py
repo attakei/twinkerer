@@ -2,22 +2,7 @@
 """Tweet operate classes.
 """
 import datetime
-
-
-def _strptime(date_string):
-    """wrapper to parse datetime-string for Twitter-API
-    """
-    try:
-        datetime_data = datetime.datetime.strptime(
-            date_string,
-            '%a %b %d %H:%M:%S %z %Y'
-        )
-    except:
-        datetime_data = datetime.datetime.strptime(
-            date_string,
-            '%a %b %d %H:%M:%S +0000 %Y'
-        )
-    return datetime_data
+from twinkerer import utils
 
 
 class _ConvertPattern(object):
@@ -63,15 +48,15 @@ class User(Model):
     id = _ConvertPattern('id', 'id')
     name = _ConvertPattern('name', 'name')
     screen_name = _ConvertPattern('screen_name', 'screen_name')
-    profile_image_url = _ConvertPattern('profile_image_url', 'profile_image_url')
-    profile_image_url_https = _ConvertPattern('profile_image_url_https', 'profile_image_url_https')
+    profile_image_url = _ConvertPattern('profile_image_url', 'profile_image_url', required=False)
+    profile_image_url_https = _ConvertPattern('profile_image_url_https', 'profile_image_url_https', required=False)
 
 
 class Tweet(Model):
     """Tweet object based from twitter-api json
     """
     id = _ConvertPattern('id', 'id')
-    created_at = _ConvertPattern('created_at', 'created_at', _strptime)
+    created_at = _ConvertPattern('created_at', 'created_at', utils.strptime)
     text = _ConvertPattern('text', 'text')
 
 
