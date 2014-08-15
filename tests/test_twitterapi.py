@@ -52,28 +52,28 @@ class ParseTweetTests(unittest.TestCase):
 
 class ConvertPatternTests(unittest.TestCase):
     def test_convert(self):
-        p_ = _ConvertPattern('id_str', 'id', str)
+        p_ = _ConvertPattern('id', str)
         self.assertIsInstance(p_.convert({'id': 1}), str)
 
     def test_no_convert(self):
-        p_ = _ConvertPattern('id_str', 'id')
+        p_ = _ConvertPattern('id')
         value = p_.convert({'id': 111})
         self.assertEqual(value, 111)
 
     def test_convert_failed(self):
         def _strptime(bs):
             return datetime.datetime.strptime(bs, '%a')
-        p_ = _ConvertPattern('id_str', 'id', _strptime)
+        p_ = _ConvertPattern('id', _strptime)
         with self.assertRaises(p_.ConvertFailed):
             p_.convert({'id': 111})
 
     def test_required(self):
-        p_ = _ConvertPattern('id_str', 'id', str)
+        p_ = _ConvertPattern('id', str)
         with self.assertRaises(p_.RequiredNotFound):
             p_.convert({'id2': 111})
 
     def test_not_required(self):
-        p_ = _ConvertPattern('id_str', 'id', str, False)
+        p_ = _ConvertPattern('id', str, False)
         try:
             p_.convert({'id2': 111})
         except p_.RequiredNotFound:
