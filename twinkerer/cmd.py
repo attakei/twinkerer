@@ -41,6 +41,8 @@ def build_args(args):
         args.to_date.month,
         args.to_date.day,
     ) + datetime.timedelta(days=1)
+    if args.run_mode is None:
+        args.run_mode = 'fetch'
 
 
 def main(argv=None):
@@ -49,6 +51,14 @@ def main(argv=None):
     if not argv:
         argv = sys.argv[1:]
     parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '-f', '--fetch', dest='run_mode',
+        action='store_const', const='fetch',
+    )
+    parser.add_argument(
+        '-p', '--post', dest='run_mode',
+        action='store_const', const='post',
+    )
     parser.add_argument(
         '--date', dest='to_date',
         action=DateStringAction,
