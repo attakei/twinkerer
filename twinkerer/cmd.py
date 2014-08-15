@@ -83,5 +83,6 @@ def main(argv=None):
         import conf
         tw = Twinkerer.from_module(conf)
 
+    print(args)
     command = getattr(tw, args.command)
     return command(args)
