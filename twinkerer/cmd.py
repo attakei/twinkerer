@@ -4,6 +4,7 @@ import argparse
 import datetime
 from twinkerer import Twinkerer
 
+
 class DateStringAction(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
         formats_ = [
@@ -83,5 +84,6 @@ def main(argv=None):
         import conf
         tw = Twinkerer.from_module(conf)
 
+    print(args)
     command = getattr(tw, args.command)
     return command(args)

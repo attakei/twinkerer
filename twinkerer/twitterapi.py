@@ -2,22 +2,10 @@
 """Tweet operate classes.
 """
 import datetime
+from twinkerer import utils
 
 
-def _strptime(date_string):
-    """wrapper to parse datetime-string for Twitter-API
-    """
-    try:
-        datetime_data = datetime.datetime.strptime(
-            date_string,
-            '%a %b %d %H:%M:%S %z %Y'
-        )
-    except:
-        datetime_data = datetime.datetime.strptime(
-            date_string,
-            '%a %b %d %H:%M:%S +0000 %Y'
-        )
-    return datetime_data
+TWITTER_URL_BASE = 'https://twitter.com'
 
 
 class _ConvertPattern(object):
@@ -27,24 +15,23 @@ class _ConvertPattern(object):
     class RequiredNotFound(Exception):
         pass
 
-    def __init__(self, target, origin, converter=None, required=True):
-        self.target = target
-        self.origin = origin
+    def __init__(self, base_name, converter=None, required=True):
+        self.base_name = base_name
         self.converter = converter
         self.required = required
 
     def convert(self, base_dict):
-        if self.origin in base_dict:
+        if self.base_name in base_dict:
             try:
                 if self.converter:
-                    attr_value_ = self.converter(base_dict[self.origin])
+                    attr_value_ = self.converter(base_dict[self.base_name])
                 else:
-                    attr_value_ = base_dict[self.origin]
+                    attr_value_ = base_dict[self.base_name]
                 return attr_value_
             except:
-                raise self.ConvertFailed('target is %s: %s' % (self.origin, base_dict[self.origin]))
+                raise self.ConvertFailed('target is %s: %s' % (self.base_name, base_dict[self.base_name]))
         elif self.required:
-            raise self.RequiredNotFound('target is %s' % (self.origin,))
+            raise self.RequiredNotFound('target is %s' % (self.base_name,))
 
 
 class Model(object):
@@ -57,13 +44,40 @@ class Model(object):
                 setattr(self, name_, pattern_.convert(json))
 
 
+class User(Model):
+    """twitter user-account object based from twitter-api json
+    """
+    id = _ConvertPattern('id')
+    name = _ConvertPattern('name')
+    screen_name = _ConvertPattern('screen_name')
+    profile_image_url = _ConvertPattern('profile_image_url', required=False)
+    profile_image_url_https = _ConvertPattern('profile_image_url_https', required=False)
+
+    @property
+    def url(self):
+        return '{base}/{user}'.format(
+            base=TWITTER_URL_BASE,
+            user=self.name,
+        )
+
 class Tweet(Model):
     """Tweet object based from twitter-api json
     """
-    id = _ConvertPattern('id', 'id_str')
-    created_at = _ConvertPattern('created_at', 'created_at', _strptime)
-    text = _ConvertPattern('text', 'text')
+    id = _ConvertPattern('id')
+    created_at = _ConvertPattern('created_at', utils.strptime)
+    text = _ConvertPattern('text')
 
+    def __init__(self, json):
+        super(Tweet, self).__init__(json)
+        self.user = User(json['user'])
+
+    @property
+    def url(self):
+        return '{base}/{user}/statuses/{tweet_id}'.format(
+            base=TWITTER_URL_BASE,
+            user=self.user.name,
+            tweet_id=self.id,
+        )
 
 class ReTweet(Tweet):
     """ReTweet object based from twitter-api json
