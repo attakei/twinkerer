@@ -13,11 +13,9 @@ from twinkerer.twitterapi import parse_tweet, Tweet, ReTweet
 DEFAULT_SECTION = 'twitter'
 
 DEFAULT_CONFIGS = {
-    'twinkerer_templates': {
-        'filename': 'tweet_log',
-        'title_oneday': 'tweets at {from_date}',
-        'title_between': 'tweets from {from_date} to {to_date}',
-    }
+    'twinkerer_filename': 'tweet_log',
+    'twinkerer_title_oneday': 'tweets at {from_date}',
+    'twinkerer_title_between': 'tweets from {from_date} to {to_date}',
 }
 
 
@@ -110,14 +108,14 @@ class Twinkerer(object):
     def build_title(self, from_date, to_date, template=None):
         if template is None:
             if from_date == to_date:
-                template = self._config['twinkerer_templates']['title_oneday']
+                template = self._config['twinkerer_title_oneday']
             else:
-                template = self._config['twinkerer_templates']['title_between']
+                template = self._config['twinkerer_title_between']
         return template.format(from_date=from_date, to_date=to_date)
 
     def create_post(self, raw_title=None, post_date=None):
         post_ = Post(
-            title=self._config['twinkerer_templates']['filename'],
+            title=self._config['twinkerer_filename'],
             date=post_date,
         )
         if raw_title is not None:
