@@ -79,8 +79,15 @@ class Tweet(Model):
             tweet_id=self.id,
         )
 
-    def as_rst(self):
-        pass
+    def as_li_rst(self):
+        base = '''
+* | **Tweet:** at {tweet_date}
+  | {tweet_body}
+        '''
+        return base.format(
+            tweet_date=self.created_at.strftime('%Y-%m-%d %H:%M'),
+            tweet_body=self.text.replace('\n', '\n  | '),
+        )
 
 class ReTweet(Tweet):
     """ReTweet object based from twitter-api json

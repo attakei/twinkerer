@@ -26,6 +26,23 @@ class TweetTests(unittest.TestCase):
     def test_url(self):
         self.assertEqual(self.tw.url, 'https://twitter.com/{0}/statuses/{1}'.format(self.tw.user.name, self.tw.id))
 
+    def test_as_li_rst(self):
+        rst_ = self.tw.as_li_rst()
+        self.assertIn(self.tw.created_at.strftime('%Y-%m-%d %H:%M'), rst_)
+        self.assertIn(self.tw.text, rst_)
+        pass
+
+    def test_as_li_rst_multilines(self):
+        rst_ = self.tw.as_li_rst()
+        cnt_line_single = len([x for x in rst_ if x =='|'])
+        self.tw.text = '''test
+test2'''
+        rst_ = self.tw.as_li_rst()
+        cnt_line_multi = len([x for x in rst_ if x =='|'])
+        print(rst_)
+        self.assertGreater(cnt_line_multi, cnt_line_single)
+        pass
+
 
 class ReTweetTests(unittest.TestCase):
     def setUp(self):
