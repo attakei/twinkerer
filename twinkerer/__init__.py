@@ -92,4 +92,5 @@ class Twinkerer(object):
                 print(u'ReTweet>\n' + tweet.text)
             else:
                 print(u'Tweet>\n' + tweet.text)
+            print(u'from '+tweet.user.name)
             print(u'at '+tweet.created_at.isoformat())
