@@ -98,7 +98,12 @@ class Twinkerer(object):
         user_id = self.me['id']
         for tweet in self.fetch_timeline(user_id, args.from_datetime, args.to_datetime):
             print('========')
-<<<<<<< HEAD
+            if isinstance(tweet, ReTweet):
+                print(u'ReTweet>\n' + tweet.text)
+            else:
+                print(u'Tweet>\n' + tweet.text)
+            print(u'from '+tweet.user.name)
+            print(u'at '+tweet.created_at.isoformat())
 
     def build_title(self, from_date, to_date, template=None):
         if template is None:
@@ -107,11 +112,3 @@ class Twinkerer(object):
             else:
                 template = self._config['twinkerer_templates']['title_between']
         return template.format(from_date=from_date, to_date=to_date)
-=======
-            if isinstance(tweet, ReTweet):
-                print(u'ReTweet>\n' + tweet.text)
-            else:
-                print(u'Tweet>\n' + tweet.text)
-            print(u'from '+tweet.user.name)
-            print(u'at '+tweet.created_at.isoformat())
->>>>>>> next_cmd/fetch
