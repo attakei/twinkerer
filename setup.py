@@ -11,7 +11,7 @@ base_dir = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(base_dir)
 
 requires = [
-    #'tinkerer',
+    'Tinkerer',
     'twitter',
 ]
 test_requires = [
