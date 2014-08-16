@@ -1,4 +1,5 @@
 import sys
+import copy
 import datetime
 import collections
 
@@ -12,13 +13,14 @@ def update_dict(d, u):
         it_ = u.items
     else:
         it_ = u.iteritems
+    d_ = copy.deepcopy(d)
     for k, v in it_():
         if isinstance(v, collections.Mapping):
-            r = update_dict(d.get(k, {}), v)
-            d[k] = r
+            r = update_dict(d_.get(k, {}), v)
+            d_[k] = r
         else:
-            d[k] = u[k]
-    return d
+            d_[k] = u[k]
+    return d_
 
 
 def strptime(date_string):

@@ -8,6 +8,7 @@ except:
     from configparser import ConfigParser, NoOptionError
 from twinkerer import Twinkerer
 import twitter
+from tinkerer.post import Post
 
 
 HERE = os.path.abspath(os.path.dirname(__file__))
@@ -114,3 +115,42 @@ class TwinkererBuildTitleTests(unittest.TestCase):
         self.assertEqual(title_, 'from %s to %s' %(str(self.yesterday), str(self.today)))
         title_ = tw.build_title(self.today, self.today)
         self.assertEqual(title_, '%s' % str(self.today))
+
+
+class TwinkererCreatePostTests(unittest.TestCase):
+    def setUp(self):
+        import testmodule1
+        self.tw = Twinkerer.from_module(testmodule1)
+        self.today = datetime.date.today()
+        self.yesterday = self.today - datetime.timedelta(1)
+
+    def test_it(self):
+        post_ = self.tw.create_post()
+        self.assertIsInstance(post_, Post)
+        self.assertEqual(post_.title, 'tweet_log')
+        self.assertIn(
+            '{}/tweet_log.rst'.format(self.today.strftime('%Y/%m/%d')),
+            post_.path,
+        )
+
+    def test_module_config(self):
+        import testmodule2
+        tw = Twinkerer.from_module(testmodule2)
+        post_ = tw.create_post()
+        self.assertIsInstance(post_, Post)
+        self.assertEqual(post_.title, 'tweet_list')
+
+
+    def test_post_date(self):
+        post_ = self.tw.create_post(post_date=self.yesterday)
+        self.assertIn(
+            '{}/tweet_log.rst'.format(self.yesterday.strftime('%Y/%m/%d')),
+            post_.path,
+        )
+
+    def test_rawtitle(self):
+        post_ = self.tw.create_post(
+            raw_title='tweets list'
+        )
+        self.assertEqual(post_.title, 'tweets list')
+        self.assertIn('tweet_log.rst', post_.path)
