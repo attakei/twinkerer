@@ -1,11 +1,18 @@
+import sys
 import datetime
 import collections
+
+PYTHON_MAJOR_VERSION = int(sys.version_info[0])
 
 
 def update_dict(d, u):
     """update dict-instance recursive.
     """
-    for k, v in u.iteritems():
+    if PYTHON_MAJOR_VERSION == 3:
+        it_ = u.items
+    else:
+        it_ = u.iteritems
+    for k, v in it_():
         if isinstance(v, collections.Mapping):
             r = update_dict(d.get(k, {}), v)
             d[k] = r
