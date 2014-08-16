@@ -79,6 +79,9 @@ class Tweet(Model):
             tweet_id=self.id,
         )
 
+    def as_rst(self):
+        pass
+
 class ReTweet(Tweet):
     """ReTweet object based from twitter-api json
     """

@@ -18,9 +18,14 @@ class TweetTests(unittest.TestCase):
         self.assertIsInstance(tw_.created_at, datetime.datetime)
         self.assertIsInstance(tw_.text, str)
         self.assertIsInstance(tw_.user, User)
+
+    def test_url(self):
+        tw_ = Tweet({
+            "id": 12738165059, "id_str": "12738165059", "created_at": "Thu Oct 14 22:20:15 +0000 2010", "text": "tweet",
+            "user": {"id": 2, "name": "testet", "screen_name": "test_user"},
+        })
         self.assertEqual(tw_.url, 'https://twitter.com/{0}/statuses/{1}'.format(tw_.user.name, tw_.id))
         # TODO: add next attributes...
-
 
 class ReTweetTests(unittest.TestCase):
     def test_from_json(self):
@@ -32,6 +37,12 @@ class ReTweetTests(unittest.TestCase):
         self.assertEqual(tw_.id, 12738165059)
         self.assertIsInstance(tw_.created_at, datetime.datetime)
         self.assertIsInstance(tw_.text, str)
+
+    def test_url(self):
+        tw_ = ReTweet({
+            "id": 12738165059, "id_str": "12738165059", "created_at": "Thu Oct 14 22:20:15 +0000 2010", "text": "tweet",
+            "user": {"id": 2, "name": "testet", "screen_name": "test_user"},
+        })
         self.assertEqual(tw_.url, 'https://twitter.com/{0}/statuses/{1}'.format(tw_.user.name, tw_.id))
 
 
@@ -44,6 +55,7 @@ class UserTests(unittest.TestCase):
         self.assertEqual(user_.screen_name, 'tweetie')
         self.assertEqual(user_.url, 'https://twitter.com/{0}'.format(user_.name))
         # TODO: add next attributes...
+
 
 class ParseTweetTests(unittest.TestCase):
     def test_tweet(self):
