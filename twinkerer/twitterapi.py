@@ -5,6 +5,9 @@ import datetime
 from twinkerer import utils
 
 
+TWITTER_URL_BASE = 'https://twitter.com'
+
+
 class _ConvertPattern(object):
     class ConvertFailed(Exception):
         pass
@@ -50,6 +53,12 @@ class User(Model):
     profile_image_url = _ConvertPattern('profile_image_url', required=False)
     profile_image_url_https = _ConvertPattern('profile_image_url_https', required=False)
 
+    @property
+    def url(self):
+        return '{base}/{user}'.format(
+            base=TWITTER_URL_BASE,
+            user=self.name,
+        )
 
 class Tweet(Model):
     """Tweet object based from twitter-api json
@@ -62,6 +71,13 @@ class Tweet(Model):
         super(Tweet, self).__init__(json)
         self.user = User(json['user'])
 
+    @property
+    def url(self):
+        return '{base}/{user}/statuses/{tweet_id}'.format(
+            base=TWITTER_URL_BASE,
+            user=self.user.name,
+            tweet_id=self.id,
+        )
 
 class ReTweet(Tweet):
     """ReTweet object based from twitter-api json
