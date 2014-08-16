@@ -8,42 +8,40 @@ import datetime
 
 
 class TweetTests(unittest.TestCase):
-    def test_from_json(self):
-        tw_ = Tweet({
+    def setUp(self):
+        self.tw = Tweet({
             "id": 12738165059, "id_str": "12738165059", "created_at": "Thu Oct 14 22:20:15 +0000 2010", "text": "tweet",
             "user": {"id": 2, "name": "testet", "screen_name": "test_user"},
         })
-        self.assertIsInstance(tw_, Tweet)
-        self.assertEqual(tw_.id, 12738165059)
-        self.assertIsInstance(tw_.created_at, datetime.datetime)
-        self.assertIsInstance(tw_.text, str)
-        self.assertIsInstance(tw_.user, User)
 
-    def test_url(self):
-        tw_ = Tweet({
-            "id": 12738165059, "id_str": "12738165059", "created_at": "Thu Oct 14 22:20:15 +0000 2010", "text": "tweet",
-            "user": {"id": 2, "name": "testet", "screen_name": "test_user"},
-        })
-        self.assertEqual(tw_.url, 'https://twitter.com/{0}/statuses/{1}'.format(tw_.user.name, tw_.id))
+
+    def test_from_json(self):
+        self.assertIsInstance(self.tw, Tweet)
+        self.assertEqual(self.tw.id, 12738165059)
+        self.assertIsInstance(self.tw.created_at, datetime.datetime)
+        self.assertIsInstance(self.tw.text, str)
+        self.assertIsInstance(self.tw.user, User)
         # TODO: add next attributes...
 
+    def test_url(self):
+        self.assertEqual(self.tw.url, 'https://twitter.com/{0}/statuses/{1}'.format(self.tw.user.name, self.tw.id))
+
+
 class ReTweetTests(unittest.TestCase):
-    def test_from_json(self):
-        tw_ = ReTweet({
+    def setUp(self):
+        self.tw = ReTweet({
             "id": 12738165059, "id_str": "12738165059", "created_at": "Thu Oct 14 22:20:15 +0000 2010", "text": "tweet",
             "user": {"id": 2, "name": "testet", "screen_name": "test_user"},
         })
-        self.assertIsInstance(tw_, ReTweet)
-        self.assertEqual(tw_.id, 12738165059)
-        self.assertIsInstance(tw_.created_at, datetime.datetime)
-        self.assertIsInstance(tw_.text, str)
+
+    def test_from_json(self):
+        self.assertIsInstance(self.tw, ReTweet)
+        self.assertEqual(self.tw.id, 12738165059)
+        self.assertIsInstance(self.tw.created_at, datetime.datetime)
+        self.assertIsInstance(self.tw.text, str)
 
     def test_url(self):
-        tw_ = ReTweet({
-            "id": 12738165059, "id_str": "12738165059", "created_at": "Thu Oct 14 22:20:15 +0000 2010", "text": "tweet",
-            "user": {"id": 2, "name": "testet", "screen_name": "test_user"},
-        })
-        self.assertEqual(tw_.url, 'https://twitter.com/{0}/statuses/{1}'.format(tw_.user.name, tw_.id))
+        self.assertEqual(self.tw.url, 'https://twitter.com/{0}/statuses/{1}'.format(self.tw.user.name, self.tw.id))
 
 
 class UserTests(unittest.TestCase):
