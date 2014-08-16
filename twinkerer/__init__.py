@@ -6,6 +6,7 @@ except:
     from configparser import ConfigParser
 import twitter
 from twinkerer import utils
+from twinkerer.twitterapi import parse_tweet, Tweet, ReTweet
 
 
 DEFAULT_SECTION = 'twitter'
@@ -71,15 +72,33 @@ class Twinkerer(object):
         tweets_ = self._api.statuses.user_timeline(user_id=user_id_)
         return tweets_
 
-    def fetch(self, args):
-        from twinkerer.twitterapi import parse_tweet, ReTweet
-        for tweet in self.get_my_timeline():
-            tweet_inst = parse_tweet(tweet)
-            if isinstance(tweet_inst, ReTweet):
-                print(u'Re>\n'+tweet_inst.text)
+    def fetch_timeline(self, user_id, from_date, to_date):
+        tl_list = []
+        done_fetch_ = False
+        current_id_ = None
+        for _ in range(10):
+            if current_id_ is None:
+                tweets_ = self._api.statuses.user_timeline(user_id=user_id)
             else:
-                print(u'Tw>\n'+tweet_inst.text)
+                tweets_ = self._api.statuses.user_timeline(user_id=user_id, max_id=current_id_)
+            for tweet in tweets_:
+                tw = Tweet(tweet)
+                current_id_ = tw.id - 1
+                if to_date <= tw.created_at:
+                    continue
+                if tw.created_at < from_date:
+                    done_fetch_ = True
+                    break
+                tl_list.append(parse_tweet(tweet))
+            if done_fetch_:
+                break
+        return tl_list
+
+    def fetch(self, args):
+        user_id = self.me['id']
+        for tweet in self.fetch_timeline(user_id, args.from_datetime, args.to_datetime):
             print('========')
+<<<<<<< HEAD
 
     def build_title(self, from_date, to_date, template=None):
         if template is None:
@@ -88,3 +107,11 @@ class Twinkerer(object):
             else:
                 template = self._config['twinkerer_templates']['title_between']
         return template.format(from_date=from_date, to_date=to_date)
+=======
+            if isinstance(tweet, ReTweet):
+                print(u'ReTweet>\n' + tweet.text)
+            else:
+                print(u'Tweet>\n' + tweet.text)
+            print(u'from '+tweet.user.name)
+            print(u'at '+tweet.created_at.isoformat())
+>>>>>>> next_cmd/fetch
