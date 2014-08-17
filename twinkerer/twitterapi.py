@@ -7,6 +7,15 @@ from twinkerer import utils
 
 TWITTER_URL_BASE = 'https://twitter.com'
 
+TWEET_HTML_TEMPLATE = u'''
+..  raw:: html
+
+<div class="twinker">
+<p class="twinker_header">{tweet_title}:</p>
+<p class="twinker_body">{tweet_body}</p>
+<p class="twinker_footer">at {tweet_date} / <a href="{tweet_url}" target="_blank">go to tweet</a></p>
+</div>
+'''
 
 class _ConvertPattern(object):
     class ConvertFailed(Exception):
@@ -79,32 +88,25 @@ class Tweet(Model):
             tweet_id=self.id,
         )
 
-    def _as_html(self, title):
-        base = u'''
-..  raw:: html
-
-    <div class="twinker" style="margin-left: 1em;">
-        <p class="twinker_header">{tweet_title}:</p>
-        <p class="twinker_body">{tweet_body}</p>
-        <p class="twinker_footer">at {tweet_date} / <a href="{tweet_url}" target="_blank">go to tweet</a></p>
-    </div>
-        '''
-        return base.format(
+    def _render(self, title, template=None):
+        if template is None:
+            template = TWEET_HTML_TEMPLATE
+        return template.format(
             tweet_title=title,
             tweet_date=self.created_at.strftime('%Y-%m-%d %H:%M'),
             tweet_body=self.text.replace('\n', '<br />'),
             tweet_url=self.url,
         )
 
-    def as_html(self):
-        return self._as_html('Tweet')
+    def as_html(self, template=None):
+        return self._render('Tweet', template)
 
 
 class ReTweet(Tweet):
     """ReTweet object based from twitter-api json
     """
-    def as_html(self):
-        return self._as_html('ReTweet')
+    def as_html(self, template=None):
+        return self._render('ReTweet', template)
 
 
 def parse_tweet(json):

@@ -33,6 +33,13 @@ class TweetTests(unittest.TestCase):
         self.assertIn(self.tw.url, html_)
         self.assertIn('Tweet:', html_)
 
+    def test_as_html_user_template(self):
+        html_ = self.tw.as_html(u'test')
+        self.assertNotIn(self.tw.created_at.strftime('%Y-%m-%d %H:%M'), html_)
+        self.assertNotIn(self.tw.text, html_)
+        self.assertNotIn(self.tw.url, html_)
+        self.assertNotIn('Tweet:', html_)
+
     def test_as_html_multilines(self):
         self.tw.text = '''test
 test2'''
@@ -62,6 +69,13 @@ class ReTweetTests(unittest.TestCase):
         self.assertIn(self.tw.text, html_)
         self.assertIn(self.tw.url, html_)
         self.assertIn('ReTweet:', html_)
+
+    def test_as_html_user_template(self):
+        html_ = self.tw.as_html(u'test')
+        self.assertNotIn(self.tw.created_at.strftime('%Y-%m-%d %H:%M'), html_)
+        self.assertNotIn(self.tw.text, html_)
+        self.assertNotIn(self.tw.url, html_)
+        self.assertNotIn('ReTweet:', html_)
 
 
 class UserTests(unittest.TestCase):
