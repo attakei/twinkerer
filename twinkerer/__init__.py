@@ -5,6 +5,7 @@ try:
 except:
     from configparser import ConfigParser
 import twitter
+from tinkerer import master
 from tinkerer.post import Post
 from twinkerer import utils
 from twinkerer.twitterapi import parse_tweet, Tweet, ReTweet
@@ -133,7 +134,10 @@ def post(twinkerer, cmd_args):
         cmd_args.from_datetime,
         cmd_args.to_datetime,
     )
-    post_content = '\n'.join([tl.as_html() for tl in timeline_])
+    post_content = ''.join([tl.as_html() for tl in timeline_])
     result_ = post_.write(post_content, author="default",
               categories="none", tags="none",
               template=None)
+    if not master.exists_doc(post_.docname):
+        master.prepend_doc(post_.docname)
+    return post_
