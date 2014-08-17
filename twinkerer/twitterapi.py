@@ -55,9 +55,9 @@ class User(Model):
 
     @property
     def url(self):
-        return '{base}/{user}'.format(
+        return u'{base}/{user}'.format(
             base=TWITTER_URL_BASE,
-            user=self.name,
+            user=self.screen_name,
         )
 
 class Tweet(Model):
@@ -73,14 +73,14 @@ class Tweet(Model):
 
     @property
     def url(self):
-        return '{base}/{user}/statuses/{tweet_id}'.format(
+        return u'{base}/{user}/statuses/{tweet_id}'.format(
             base=TWITTER_URL_BASE,
-            user=self.user.name,
+            user=self.user.screen_name,
             tweet_id=self.id,
         )
 
     def _as_html(self, title):
-        base = '''
+        base = u'''
 ..  raw:: html
 
     <div class="twinker" style="margin-left: 1em;">

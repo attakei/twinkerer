@@ -24,7 +24,7 @@ class TweetTests(unittest.TestCase):
         # TODO: add next attributes...
 
     def test_url(self):
-        self.assertEqual(self.tw.url, 'https://twitter.com/{0}/statuses/{1}'.format(self.tw.user.name, self.tw.id))
+        self.assertEqual(self.tw.url, u'https://twitter.com/{0}/statuses/{1}'.format(self.tw.user.screen_name, self.tw.id))
 
     def test_as_html(self):
         html_ = self.tw.as_html()
@@ -54,7 +54,7 @@ class ReTweetTests(unittest.TestCase):
         self.assertIsInstance(self.tw.text, str)
 
     def test_url(self):
-        self.assertEqual(self.tw.url, 'https://twitter.com/{0}/statuses/{1}'.format(self.tw.user.name, self.tw.id))
+        self.assertEqual(self.tw.url, u'https://twitter.com/{0}/statuses/{1}'.format(self.tw.user.screen_name, self.tw.id))
 
     def test_as_html(self):
         html_ = self.tw.as_html()
@@ -71,7 +71,7 @@ class UserTests(unittest.TestCase):
         self.assertEqual(user_.id, 1)
         self.assertEqual(user_.name, 'user')
         self.assertEqual(user_.screen_name, 'tweetie')
-        self.assertEqual(user_.url, 'https://twitter.com/{0}'.format(user_.name))
+        self.assertEqual(user_.url, 'https://twitter.com/{0}'.format(user_.screen_name))
         # TODO: add next attributes...
 
 
