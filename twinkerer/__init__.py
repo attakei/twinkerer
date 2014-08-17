@@ -126,7 +126,7 @@ class Twinkerer(object):
 def post(twinkerer, cmd_args):
     user_id_ = twinkerer.me['id']
     title_ = twinkerer.build_title(cmd_args.from_date, cmd_args.to_date)
-    post_ = twinkerer.create_post(title_, cmd_args.to_date)
+    post_ = twinkerer.create_post(title_, cmd_args.post_date)
     post_content = ''
     timeline_ = twinkerer.fetch_timeline(
         user_id_,

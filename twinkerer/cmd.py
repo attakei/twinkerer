@@ -63,7 +63,12 @@ def main(argv=None):
         action='store_const', const='post',
     )
     parser.add_argument(
-        '--date', dest='to_date',
+        '--date', dest='post_date',
+        action=DateStringAction,
+        default=datetime.date.today(),
+    )
+    parser.add_argument(
+        '--to', dest='to_date',
         action=DateStringAction,
         default=(datetime.date.today() - datetime.timedelta(days=1)),
     )
