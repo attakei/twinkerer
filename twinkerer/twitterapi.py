@@ -10,11 +10,11 @@ TWITTER_URL_BASE = 'https://twitter.com'
 TWEET_HTML_TEMPLATE = u'''
 ..  raw:: html
 
-<div class="twinker">
-<p class="twinker_header">{tweet_title}:</p>
-<p class="twinker_body">{tweet_body}</p>
-<p class="twinker_footer">at {tweet_date} / <a href="{tweet_url}" target="_blank">go to tweet</a></p>
-</div>
+    <div class="twinker">
+    <p class="twinker_header">{tweet_title}:</p>
+    <p class="twinker_body">{tweet_body}</p>
+    <p class="twinker_footer">at {tweet_date} / <a href="{tweet_url}" target="_blank">go to tweet</a></p>
+    </div>
 '''
 
 class _ConvertPattern(object):
