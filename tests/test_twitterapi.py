@@ -31,14 +31,13 @@ class TweetTests(unittest.TestCase):
         self.assertIn(self.tw.created_at.strftime('%Y-%m-%d %H:%M'), html_)
         self.assertIn(self.tw.text, html_)
         self.assertIn(self.tw.url, html_)
+        self.assertIn('Tweet:', html_)
 
     def test_as_html_multilines(self):
         self.tw.text = '''test
 test2'''
         html_ = self.tw.as_html()
         self.assertIn('<br />', html_)
-        print(html_)
-        self.fail('')
 
 
 class ReTweetTests(unittest.TestCase):
@@ -56,6 +55,13 @@ class ReTweetTests(unittest.TestCase):
 
     def test_url(self):
         self.assertEqual(self.tw.url, 'https://twitter.com/{0}/statuses/{1}'.format(self.tw.user.name, self.tw.id))
+
+    def test_as_html(self):
+        html_ = self.tw.as_html()
+        self.assertIn(self.tw.created_at.strftime('%Y-%m-%d %H:%M'), html_)
+        self.assertIn(self.tw.text, html_)
+        self.assertIn(self.tw.url, html_)
+        self.assertIn('ReTweet:', html_)
 
 
 class UserTests(unittest.TestCase):
