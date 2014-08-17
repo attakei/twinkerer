@@ -2,7 +2,7 @@ import os
 import sys
 import argparse
 import datetime
-from twinkerer import Twinkerer
+from twinkerer import Twinkerer, post
 
 
 class DateStringAction(argparse.Action):
@@ -86,5 +86,7 @@ def main(argv=None):
         tw = Twinkerer.from_module(conf)
 
     print(args)
-    command = getattr(tw, args.command)
-    return command(args)
+    if args.command == 'fetch':
+        return tw.fetch(args)
+    elif args.command == 'post':
+        return post(tw, args)

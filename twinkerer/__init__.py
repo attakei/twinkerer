@@ -121,3 +121,19 @@ class Twinkerer(object):
         if raw_title is not None:
             post_.title = raw_title
         return post_
+
+
+def post(twinkerer, cmd_args):
+    user_id_ = twinkerer.me['id']
+    title_ = twinkerer.build_title(cmd_args.from_date, cmd_args.to_date)
+    post_ = twinkerer.create_post(title_, cmd_args.to_date)
+    post_content = ''
+    timeline_ = twinkerer.fetch_timeline(
+        user_id_,
+        cmd_args.from_datetime,
+        cmd_args.to_datetime,
+    )
+    post_content = '\n'.join([tl.as_html() for tl in timeline_])
+    result_ = post_.write(post_content, author="default",
+              categories="none", tags="none",
+              template=None)
