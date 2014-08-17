@@ -53,11 +53,12 @@ def main(argv=None):
     if not argv:
         argv = sys.argv[1:]
     parser = argparse.ArgumentParser()
-    parser.add_argument(
+    group_ = parser.add_mutually_exclusive_group()
+    group_.add_argument(
         '-f', '--fetch', dest='command',
         action='store_const', const='fetch',
     )
-    parser.add_argument(
+    group_.add_argument(
         '-p', '--post', dest='command',
         action='store_const', const='post',
     )
