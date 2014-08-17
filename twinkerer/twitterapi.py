@@ -79,15 +79,22 @@ class Tweet(Model):
             tweet_id=self.id,
         )
 
-    def as_li_rst(self):
+    def as_html(self):
         base = '''
-* | **Tweet:** at {tweet_date}
-  | {tweet_body}
+..  raw:: html
+
+    <div class="twinker" style="margin-left: 1em;">
+        <p class="twinker_header">Tweet:</p>
+        <p class="twinker_body">{tweet_body}</p>
+        <p class="twinker_footer">at {tweet_date} / <a href="{tweet_url}" target="_blank">go to tweet</a></p>
+    </div>
         '''
         return base.format(
             tweet_date=self.created_at.strftime('%Y-%m-%d %H:%M'),
-            tweet_body=self.text.replace('\n', '\n  | '),
+            tweet_body=self.text.replace('\n', '<br />'),
+            tweet_url=self.url,
         )
+
 
 class ReTweet(Tweet):
     """ReTweet object based from twitter-api json

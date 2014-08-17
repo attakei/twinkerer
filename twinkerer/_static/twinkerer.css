@@ -1,0 +1,12 @@
+div.twinker {
+    margin-left: 1em;
+}
+div.twinker .twinker_header {
+    text-weight: bold;
+}
+div.twinker .twinker_body {
+    margin-left: 1em;
+}
+div.twinker .twinker_footer {
+    text-align: right;
+}
