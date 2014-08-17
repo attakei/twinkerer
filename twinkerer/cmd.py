@@ -3,6 +3,7 @@ import sys
 import argparse
 import datetime
 from twinkerer import Twinkerer, post
+from twinkerer import twitterapi
 
 
 class DateStringAction(argparse.Action):
@@ -48,6 +49,18 @@ def build_args(args):
         args.command = 'fetch'
 
 
+def fetch(twinkerer, args):
+    user_id = twinkerer.me['id']
+    for tweet in twinkerer.fetch_timeline(user_id, args.from_datetime, args.to_datetime):
+        print('========')
+        if isinstance(tweet, twitterapi.ReTweet):
+            print(u'ReTweet>\n' + tweet.text)
+        else:
+            print(u'Tweet>\n' + tweet.text)
+        print(u'from '+tweet.user.name)
+        print(u'at '+tweet.created_at.isoformat())
+
+
 def main(argv=None):
     """console script
     """
@@ -91,6 +104,6 @@ def main(argv=None):
         tw = Twinkerer.from_module(conf)
 
     if args.command == 'fetch':
-        return tw.fetch(args)
+        return fetch(tw, args)
     elif args.command == 'post':
         return post(tw, args)

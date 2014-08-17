@@ -95,17 +95,6 @@ class Twinkerer(object):
                 break
         return tl_list
 
-    def fetch(self, args):
-        user_id = self.me['id']
-        for tweet in self.fetch_timeline(user_id, args.from_datetime, args.to_datetime):
-            print('========')
-            if isinstance(tweet, ReTweet):
-                print(u'ReTweet>\n' + tweet.text)
-            else:
-                print(u'Tweet>\n' + tweet.text)
-            print(u'from '+tweet.user.name)
-            print(u'at '+tweet.created_at.isoformat())
-
     def build_title(self, from_date, to_date, template=None):
         if template is None:
             if from_date == to_date:
