@@ -52,7 +52,7 @@ class PyTest(TestCommand):
 
 setup(
     name='twinkerer',
-    version='0.0.1',
+    version='0.0.2',
     description="tinkerer small extension to use twitter api.",
     long_description=readme,
     author='attakei',
