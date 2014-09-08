@@ -3,6 +3,8 @@ import copy
 import datetime
 import collections
 import pytz
+from dateutil import parser
+
 
 PYTHON_MAJOR_VERSION = int(sys.version_info[0])
 
@@ -28,10 +30,7 @@ def strptime(date_string):
     """wrapper to parse datetime-string for Twitter-API
     """
     try:
-        datetime_data = datetime.datetime.strptime(
-            date_string,
-            '%a %b %d %H:%M:%S %z %Y'
-        )
+        datetime_data = parser.parse(date_string)
     except:
         datetime_data = datetime.datetime.strptime(
             date_string,

@@ -13,6 +13,7 @@ sys.path.append(base_dir)
 requires = [
     'Tinkerer',
     'twitter',
+    'python-dateutil',
     'pytz',
 ]
 test_requires = [
