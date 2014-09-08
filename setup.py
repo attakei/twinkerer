@@ -13,6 +13,7 @@ sys.path.append(base_dir)
 requires = [
     'Tinkerer',
     'twitter',
+    'pytz',
 ]
 test_requires = [
     'pytest',
