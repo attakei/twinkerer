@@ -36,4 +36,5 @@ def strptime(date_string):
             date_string,
             '%a %b %d %H:%M:%S +0000 %Y'
         )
+        datetime_date = pytz.utc.localize(datetime_data)
     return datetime_data
