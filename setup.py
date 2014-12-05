@@ -24,7 +24,7 @@ classifiers = [
     'Programming Language :: Python',
     'License :: OSI Approved :: MIT License',
     'Operating System :: OS Independent',
-    'Development Status :: 1 - Planning',
+    'Development Status :: 3 - Alpha',
     'Intended Audience :: Developers',
     'Topic :: Software Development :: Libraries :: Python Modules',
 ]
@@ -58,7 +58,7 @@ setup(
     author='attakei',
     author_email='attakei@gmail.com',
     license='MIT License',
-    url='http://attakei.net/',
+    url='https://github.com/attakei/twinkerer',
     classifiers=classifiers,
 
     install_requires=requires,
