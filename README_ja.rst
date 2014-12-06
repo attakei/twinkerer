@@ -37,6 +37,16 @@ conf.py に次の変数を追加します。
 使い方
 ------
 
+至極シンプルな使い方
 
-参考
-----
+.. code::
+
+   $ twinker -p
+   (output result generated rst-file)
+
+
+
+参考リンク
+----------
+
+* http://tinkerer.me/
