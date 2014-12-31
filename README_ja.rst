@@ -26,12 +26,17 @@ pipを使用してインストールする
 
 事前にtinkererのプロジェクトが作成されていることを前提にします。
 
-conf.py に次の変数を追加します。
+Twitter Developers にて、事前にアプリケーションの作成を行います。
+PermissionsはReadのみで十分です。
 
-* twitter_consumer_key
-* twitter_consumer_secret
-* twitter_access_token_key
-* twitter_access_token_secret
+aconf.py に次の変数を追加します。
+
+.. code-block:: python
+
+   twitter_consumer_key = 'your_application_consumer_key'
+   twitter_consumer_secret = 'your_application_consumer_secret'
+   twitter_access_token_key = 'your_access_token'
+   twitter_access_token_secret = 'your_access_token_secret'
 
 
 使い方
