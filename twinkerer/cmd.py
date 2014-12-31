@@ -115,4 +115,5 @@ def main(argv=None):
     if args.command == 'fetch':
         return fetch(tw, args)
     elif args.command == 'post':
-        return post(tw, args)
+        new_post = post(tw, args)
+        print("New post created as '%s'" % new_post.path)
