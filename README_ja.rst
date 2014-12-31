@@ -11,7 +11,7 @@ TwinkererはTinkerer上で自分のツイートまとめエントリーの作成
 
 .. code::
 
-   $ git clone https://github.com/attakei/twinkerer twinkerer
+   $ git clone https://github.com/attakei/twinkerer.git twinkerer
    $ cd twinkerer
    $ python setup.py install
 
